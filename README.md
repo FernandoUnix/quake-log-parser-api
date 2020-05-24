@@ -1,5 +1,5 @@
 # Quake log parser
-<br/>
+
 # Ferramentas utilizadas para desenvolvimento da solução
 
 * Java 11
