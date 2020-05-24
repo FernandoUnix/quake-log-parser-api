@@ -1,6 +1,6 @@
 # Quake log parser
-
-# Ferramentas utilizadas para desenvolvimento da solução:
+<br/>
+# Ferramentas utilizadas para desenvolvimento da solução
 
 * Java 11
 * Springboot 2.3
@@ -25,7 +25,10 @@
 
 /api/v1/partidas<br/>
 /api/v1/partidas/{id}<br/>
-Swagger - /swagger-ui.html#/quake-parser-resource
+
+# Swagger 
+
+/swagger-ui.html#/quake-parser-resource
 
 
 
