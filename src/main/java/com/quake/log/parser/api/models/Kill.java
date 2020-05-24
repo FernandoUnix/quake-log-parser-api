@@ -1,13 +1,9 @@
 package com.quake.log.parser.api.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 public class Kill {
 
-	@JsonIgnoreProperties(value = {"kills"}, allowSetters= true)
 	private Player matou;
-	
-	@JsonIgnoreProperties(value = {"kills"}, allowSetters= true)
+
 	private Player morreu;
 
 	private MotivoMorte motivoMorte;

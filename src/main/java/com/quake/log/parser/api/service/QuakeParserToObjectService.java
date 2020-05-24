@@ -21,13 +21,13 @@ import com.quake.log.parser.api.util.ParserUtil;
 @Service
 public class QuakeParserToObjectService implements IQuakeParser {
 
+	private static Logger log = LoggerFactory.getLogger(QuakeParserToObjectService.class);
+	
 	@Value("${file.log.path}")
 	private String urlPathFile;
 
 	@Value("${game.inicio}")
 	private String inicioGame;
-
-	private static Logger log = LoggerFactory.getLogger(QuakeParserToObjectService.class);
 
 	public List<Partida> read() {
 
@@ -41,7 +41,7 @@ public class QuakeParserToObjectService implements IQuakeParser {
 
 			partidas.remove(0);
 
-			log.info("Quantidade de partidas : " + partidas.size());
+			log.info("Quantidade total de partidas : " + partidas.size());
 
 			List<Partida> lstPartidas = new ArrayList<Partida>();
 
@@ -53,6 +53,8 @@ public class QuakeParserToObjectService implements IQuakeParser {
 				List<String> jogadores = part.stream().filter(x -> x.contains("ClientUserinfoChanged"))
 						.collect(Collectors.toList());
 
+				log.info("Quantidade total de jogadoers : " + jogadores.size());
+				
 				if (jogadores.size() > 0) {
 					MontarPlayers(partida, jogadores);
 				}
@@ -65,6 +67,8 @@ public class QuakeParserToObjectService implements IQuakeParser {
 
 				List<String> kills = part.stream().filter(x -> x.contains("killed")).collect(Collectors.toList());
 
+				log.info("Quantidade total de kills : " + kills.size());
+				
 				if (kills.size() > 0) {
 					MontarKills(partida, kills);
 				}
@@ -75,10 +79,12 @@ public class QuakeParserToObjectService implements IQuakeParser {
 
 			return lstPartidas;
 
-		} catch (URISyntaxException e1) {
-			e1.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (URISyntaxException ex) {
+			log.error("Error ao processar arquivo: "+ex.getMessage());
+			ex.printStackTrace();
+		} catch (IOException ex) {
+			log.error("Error ao processar arquivo: "+ex.getMessage());
+			ex.printStackTrace();
 		}
 
 		return null;
@@ -88,30 +94,31 @@ public class QuakeParserToObjectService implements IQuakeParser {
 		kills.forEach(kill -> {
 			Kill k = MontarKill(partida, kill);
 			partida.addKill(k);
-
 		});
 	}
 
-	private Kill MontarKill(Partida partida, String kill) {
+	private Kill MontarKill(Partida partida, String killLinha) {
 
-		Kill k = new Kill();
+		Kill kill = new Kill();
 
-		int indexOfKilled = kill.indexOf("killed");
-		int indexOfBy = kill.indexOf("by");
+		int indexOfKilled = killLinha.indexOf("killed");
+		int indexOfBy = killLinha.indexOf("by");
 
-		String matou = kill.substring(kill.lastIndexOf(":") + 2, indexOfKilled).trim();
-		String morreu = kill.substring(indexOfKilled + 7, indexOfBy).trim();
-		String motivo = kill.substring(indexOfBy + 3).trim();
+		String matou = killLinha.substring(killLinha.lastIndexOf(":") + 2, indexOfKilled).trim();
+		String morreu = killLinha.substring(indexOfKilled + 7, indexOfBy).trim();
+		String motivo = killLinha.substring(indexOfBy + 3).trim();
 
 		Player playerMatou = partida.getPlayerByNome(matou);
 
-		k.setMatou(playerMatou);
-		k.setMorreu(partida.getPlayerByNome(morreu));
-		k.setMotivoMorte(ParserUtil.getEnumFromString(MotivoMorte.class, motivo));
+		kill.setMatou(playerMatou);
+		kill.setMorreu(partida.getPlayerByNome(morreu));
+		kill.setMotivoMorte(ParserUtil.getEnumFromString(MotivoMorte.class, motivo));
 
-		playerMatou.addKill(k);
+		playerMatou.addKill(kill);
 
-		return k;
+		log.info("Kill criado: " + kill);
+		
+		return kill;
 	}
 
 	private void MontarPlayers(Partida partida, List<String> jogadores) {
@@ -132,6 +139,8 @@ public class QuakeParserToObjectService implements IQuakeParser {
 
 		player.setNome(nomeJogador);
 
+		log.info("Player criado: " + player);
+		
 		return player;
 	}
 }
