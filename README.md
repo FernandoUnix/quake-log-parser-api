@@ -14,19 +14,18 @@
 
 # RUN
 
-1 - mvn install / mvn clean install
+1 - mvn install / mvn clean install<br/>
 2 - mvn spring-boot:run
 
 # TESTE
 
 1 - mvn test
 
-Swagger - /swagger-ui.html#/quake-parser-resource
-
 # Endpoints
 
-/api/v1/partidas
-/api/v1/partidas/{id}
+/api/v1/partidas<br/>
+/api/v1/partidas/{id}<br/>
+Swagger - /swagger-ui.html#/quake-parser-resource
 
 
 
