@@ -1,0 +1,12 @@
+{ 
+	"game_1": {
+        "total_kills": 0,
+        "players": [
+            ""
+        ],
+        "kills": {
+            "Isgalamido": 0
+        },
+        "kills_by_means": {}
+      }
+}
